@@ -15,11 +15,12 @@ typedef struct node_t{
 
 typedef struct skip_list_t{
     node_t* head;
-    size_t size;
+    unsigned long size;
     
 } skip_list_t;
 
 void init_list(skip_list_t*);
-void inset(skip_list_t*, unsigned short key, short value);
+void insert_update(skip_list_t*, unsigned short key, short value);
+void print_list(skip_list_t* l);
 
 #endif
