@@ -38,3 +38,7 @@
 .DS_Store
 
 main
+*.zip
+*.tar.gz
+*.tar
+*.gz
