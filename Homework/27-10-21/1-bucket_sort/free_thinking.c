@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #define MAX_BUCKET 5
 #define NEW_LINE printf("\n");
 
@@ -26,53 +27,52 @@ int* sort(int* arr, int size){
     if(size == 1)
         return arr;
 
+    int __min = min(arr, size), __max = max(arr, size);
+
+    if(__min == __max)
+        return arr;
+
     int** arr_sorted;
     arr_sorted = (int**)calloc(MAX_BUCKET, sizeof(int*));
 
-    int x = (size < MAX_BUCKET) ? ((max(arr, size) - min(arr, size)) / MAX_BUCKET) + 1 : max(arr, size) / MAX_BUCKET;
+    int x = (__max - __min) / MAX_BUCKET;
     int bs[MAX_BUCKET] = {0};
     int bs_temp[MAX_BUCKET] = {0};
 
     printf("\n[SIZE] %d | [MAX] %d | [MIN] %d | [X] %d\n", size, max(arr, size), min(arr, size), x);
     for(int i = 0; i < size; ++i){
-        for(int j = 1; j <= MAX_BUCKET; ++j){
-            int temp = (size < MAX_BUCKET) ? min(arr, size) + x * j : x * (j + 1);
+        for(int j = 0; j < MAX_BUCKET; ++j){
+            int temp = __min + + x * j;
+            (x == 0) ? x++ : x;
             //printf("arr (%d) ? temp (%d)\n", arr[i], temp);
-            if(arr[i] <= temp+1){
-                ++bs[j-1];
-                ++bs_temp[j-1];
+            if(arr[i] <= temp){
+                ++bs[j];
+                ++bs_temp[j];
                 break;
+            }
+            if(j == MAX_BUCKET-1){
+                ++bs[j];
+                ++bs_temp[j];
             }
         }
     }
 
-
-    for(int i = 0; i < MAX_BUCKET; ++i)
-        printf("%d ", bs[i]);
-    printf("\n");
-
     for(int i = 0; i < MAX_BUCKET; ++i)
         arr_sorted[i] = (int*)calloc(bs[i], sizeof(int));
 
-/*     for(int i = 0; i < MAX_BUCKET; ++i){
-        for(int j = 0; j < size; ++j){
-            int temp = x * j;
-            if(arr[j] <= temp){
-                arr_sorted[i][--bs[i]] = arr[j];
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < MAX_BUCKET; ++j){
+            int temp = __min + + x * j;
+            (x == 0) ? x++ : x;
+            printf("arr (%d) ? temp (%d)\n", arr[i], temp);
+            if(arr[i] <= temp){
+                printf("[ADDED] %d: buck (%d) & bs (%d)\n", arr[i], j, bs[j]);
+                arr_sorted[j][--bs[j]] = arr[i];
+                printf("[NEW_ARR_VAL] %d\n", arr_sorted[j][bs[j]]);
                 break;
             }
-        }
-    } */
-
-    for(int i = 0; i < size; ++i){
-        for(int j = 1; j <= MAX_BUCKET; ++j){
-            int temp = (size < MAX_BUCKET) ? min(arr, size) + x * j : x * (j + 1);
-            printf("arr (%d) ? temp (%d)\n", arr[i], temp+1);
-            if(arr[i] <= temp+1){
-                printf("[ADDED] %d: buck (%d) & bs (%d)\n", arr[i], j-1, bs[j-1]);
-                arr_sorted[j-1][--bs[j-1]] = arr[i];
-                printf("[NEW_ARR_VAL] %d\n", arr_sorted[j-1][bs[j-1]]);
-                break;
+            if(j == MAX_BUCKET-1){
+                arr_sorted[j][--bs[j]] = arr[i];
             }
         }
     }
@@ -100,7 +100,7 @@ int* sort(int* arr, int size){
 }
 
 int main(){
-    int arr[] = {29, 25, 27, 49, 9, 37, 20, 43};
+    int arr[] = {30, 30, -5, 32, 32, -50, 35, 1303};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 

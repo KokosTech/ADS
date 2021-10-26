@@ -154,7 +154,7 @@ int* sort(int* arr, int size){
 }
 
 int main(){
-    int arr[] = {29, 28, 27, 30, 9, 37, 20, 43};
+    int arr[] = {29, 30, 31, 32, 33, 50, 20, 43};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 
