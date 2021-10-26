@@ -29,6 +29,9 @@ int* sort(int* arr, int size){
 
     int __min = min(arr, size), __max = max(arr, size);
 
+    if(__min == __max)
+        return arr;
+
     int** arr_sorted;
     arr_sorted = (int**)calloc(MAX_BUCKET, sizeof(int*));
 
@@ -54,23 +57,8 @@ int* sort(int* arr, int size){
         }
     }
 
-
-    for(int i = 0; i < MAX_BUCKET; ++i)
-        printf("%d ", bs[i]);
-    printf("\n");
-
     for(int i = 0; i < MAX_BUCKET; ++i)
         arr_sorted[i] = (int*)calloc(bs[i], sizeof(int));
-
-/*     for(int i = 0; i < MAX_BUCKET; ++i){
-        for(int j = 0; j < size; ++j){
-            int temp = x * j;
-            if(arr[j] <= temp){
-                arr_sorted[i][--bs[i]] = arr[j];
-                break;
-            }
-        }
-    } */
 
     for(int i = 0; i < size; ++i){
         for(int j = 0; j < MAX_BUCKET; ++j){
@@ -112,7 +100,7 @@ int* sort(int* arr, int size){
 }
 
 int main(){
-    int arr[] = {29, 30, 31, 49, 9, 37, 20, 43};
+    int arr[] = {30, 30, 31, 32, 32, 34, 35, 36};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 
