@@ -98,15 +98,13 @@ int* sort(int* arr, int size){
 }
 
 int main(){
-    int arr[] = {12, 12, 3, 4, -5, 10, 6, 2, 23, 9};
+    int arr[] = {10};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 
-    for(int i = 0; i < (int)(sizeof(arr)/sizeof(int)); ++i){
+    for(int i = 0; i < size; ++i){
         printf("%d ", sorted[i]);
     } NEW_LINE
-
-    free(sorted);
 
     return 0;
 }
