@@ -21,11 +21,15 @@ int min(int* arr, int size){
 }
 
 int* sort(int* arr, int size){
+    // Bottom of recursion / Checks
+
     if(size == 0)
         return NULL;
 
     if(size == 1)
         return arr;
+
+    // Vars for the last check / for the algorithm
 
     int __min = min(arr, size), __max = max(arr, size);
 
@@ -36,27 +40,33 @@ int* sort(int* arr, int size){
     int bs[MAX_BUCKET] = {0};
     int bs_temp[MAX_BUCKET] = {0};
 
+    // Getting the size for the buckets - we could use resize instead of 2 separate loops
+
+    for(int i = 0; i < size; ++i){
+        for(int j = 0; j < MAX_BUCKET; ++j){
+            int temp = __min + + x * j;
+            (x == 0) ? x++ : x;
+            if(arr[i] <= temp){
+                ++bs[j];
+                ++bs_temp[j];
+                break;
+            }
+            if(j == MAX_BUCKET - 1){
+                ++bs[j];
+                ++bs_temp[j];
+            }
+        }
+    }
+
+    // Heap memory allocation 
+
     int** arr_sorted;
     arr_sorted = (int**)calloc(MAX_BUCKET, sizeof(int*));
-
-    for(int i = 0; i < size; ++i){
-        for(int j = 0; j < MAX_BUCKET; ++j){
-            int temp = __min + + x * j;
-            (x == 0) ? x++ : x;
-            if(arr[i] <= temp){
-                ++bs[j];
-                ++bs_temp[j];
-                break;
-            }
-            if(j == MAX_BUCKET-1){
-                ++bs[j];
-                ++bs_temp[j];
-            }
-        }
-    }
-
     for(int i = 0; i < MAX_BUCKET; ++i)
         arr_sorted[i] = (int*)calloc(bs[i], sizeof(int));
+    int* arr_sorted_full = (int*)calloc(size, sizeof(int));
+
+    // Filling the buckets
 
     for(int i = 0; i < size; ++i){
         for(int j = 0; j < MAX_BUCKET; ++j){
@@ -66,13 +76,14 @@ int* sort(int* arr, int size){
                 arr_sorted[j][--bs[j]] = arr[i];
                 break;
             }
-            if(j == MAX_BUCKET-1){
+            if(j == MAX_BUCKET - 1){
                 arr_sorted[j][--bs[j]] = arr[i];
             }
         }
     }
 
-    int* arr_sorted_full = (int*)calloc(size, sizeof(int));
+    // Recursion - aka sorting the buckets -> cat-ing them -> freeing them
+
     for(int i = 0, idx = 0; i < MAX_BUCKET; ++i){
         arr_sorted[i] = sort(arr_sorted[i], bs_temp[i]);
         for(int j = 0; j < bs_temp[i]; ++j){
@@ -81,23 +92,20 @@ int* sort(int* arr, int size){
                 ++idx;
             }
         }
-    }
-
-    for(int i = 0; i < MAX_BUCKET; ++i)
         free(arr_sorted[i]);
-    free(arr_sorted);
-
+    }
+    free(arr_sorted); 
     return arr_sorted_full;
 }
 
 int main(){
-    int arr[] = {30, 30, -5, 32, 32, -50, 35, 1303};
+    int arr[] = {12, 12, 3, 4, 5, 10, 6, 2, 23, 9};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 
     for(int i = 0; i < (int)(sizeof(arr)/sizeof(int)); ++i){
         printf("%d ", sorted[i]);
-    } NEW_LINE;
+    } NEW_LINE
 
     free(sorted);
 
