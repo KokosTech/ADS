@@ -98,7 +98,7 @@ int* sort(int* arr, int size){
 }
 
 int main(){
-    int arr[] = {10};
+    int arr[] = {42, 32, 33, 52, 37, 47, 51, 12, 12, 3, 4, -5, 10, 6, 2, 23, 9};
     int size = sizeof(arr)/sizeof(int);
     int* sorted = sort(arr, size);
 
