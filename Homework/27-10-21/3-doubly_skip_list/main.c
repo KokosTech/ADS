@@ -62,7 +62,7 @@ void insert_update(d_skip_list_t *list, unsigned long key, int value) {
     char level = (key % FREQ) ? 1 : 2;
 
     new->key = key;
-    new->value;
+    new->value = value;
     
     new->xpn = NULL;
 
@@ -80,7 +80,7 @@ void insert_update(d_skip_list_t *list, unsigned long key, int value) {
     new->next = current->next;
     new->prev = current;
     current->next = new;
-    free(update);
+    //free(update);
     ++list->size;
 }
 
@@ -136,10 +136,12 @@ void destroy(d_skip_list_t *l) {
 int main() {
     d_skip_list_t l;
     init_list(&l);
-    insert_update(&l, 2, 12);
-    insert_update(&l, 6, 32);
-    insert_update(&l, 4, 72);
-    insert_update(&l, 3, 42);
+    insert_update(&l, 1, 1);
+    insert_update(&l, 2, 2);
+    insert_update(&l, 3, 3);
+    insert_update(&l, 4, 4);
+    insert_update(&l, 5, 5);
+    insert_update(&l, 6, 6);
     print_list(&l);
 /*     print(&l);
     destroy(&l) */;
