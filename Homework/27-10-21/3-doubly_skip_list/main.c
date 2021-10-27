@@ -37,6 +37,8 @@ void init_list(d_skip_list_t *list) {
     list->size = 0;
 }
 
+// I give up comenting my code, my eyes are sore from helping the others, i need seruous help
+
 void insert_update(d_skip_list_t *list, unsigned long key, int value) {
     node_t* current = list->head;
     node_t* prev = NULL, *next = NULL, *update;
@@ -80,7 +82,7 @@ void insert_update(d_skip_list_t *list, unsigned long key, int value) {
     new->next = current->next;
     new->prev = current;
     current->next = new;
-    //free(update);
+    //free(update); - Doesn't work - since it's an XOR
     ++list->size;
 }
 
@@ -109,29 +111,18 @@ void print_list(d_skip_list_t* list){
     }
 }
 
-/* void print(d_skip_list_t *l) {
-    for (int i = MAX_LEVEL - 1; i >= 0; --i) {
-        node_t *current = l->head;
-        while (current->next[i] != NULL) {
-                current = current->next[i];
-                printf("%d(%d) ", current->value, current->key);
-        }
-        printf("\n");
-    }
-
-} 
-
-void destroy(d_skip_list_t *l) {
-    node_t *current, *next;
-    next = l->head;
-    
-    while (next) {
-        current = next;
-        next = current->next[0];
-        free(current->next);
-        free(current);
-    }
-} */
+void kill_list(d_skip_list_t* list) {
+    node_t* current = list->head, *next = current->next;
+	
+	while (next != NULL) {
+		current = next;
+		next = current->next;
+		free(current);
+	}
+	
+	free(next);
+	free(list->head);
+}
 
 int main() {
     d_skip_list_t l;
@@ -143,6 +134,7 @@ int main() {
     insert_update(&l, 5, 5);
     insert_update(&l, 6, 6);
     print_list(&l);
+    kill_list(&l);
 /*     print(&l);
     destroy(&l) */;
     return 0;
