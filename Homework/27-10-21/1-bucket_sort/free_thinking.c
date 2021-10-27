@@ -3,6 +3,10 @@
 #define MAX_BUCKET 5
 #define NEW_LINE printf("\n");
 
+// This code is trademark to me, don't you damn dare steal it
+// I've spent too much time talking to myself, while writing this code
+// I need help 
+
 int max(int* arr, int size){
     int max = arr[0];
     for (int i = 1; i < size; i++)
