@@ -4,6 +4,7 @@
 
 #define MAX_LEVEL 2 // No of levels (aka 1 - normal LL & n-1 express lanes - in this case (logic) - 1 express lane)
 #define FREQ 3 // How frequent do we want an express lane // in this case for level 2 (level 1 express lane)
+#define NEW_LINE printf("\n");
 
 // Struct for the nodes
 typedef struct node_t {
@@ -36,40 +37,79 @@ void init_list(d_skip_list_t *list) {
     list->size = 0;
 }
 
-void insert_update(skip_list_t *list, unsigned short key, short value) {
-    node_t **update = (node_t **)calloc(sizeof(node_t *), MAX_LEVEL);
-    node_t *current = list->head;
-    for (int i = MAX_LEVEL - 1; i >= 0; --i) {
-        while (current->next[i] != NULL && 
-            current->next[i]->key < key)
-                current = current->next[i];
-        update[i] = current;
+void insert_update(d_skip_list_t *list, unsigned long key, int value) {
+    node_t* current = list->head;
+    node_t* prev = NULL, *next = NULL, *update;
+    next = xor(current->xpn, prev);
+
+    while(next && (unsigned)next->key < key){
+        prev = current;
+        current = next;
+        next = xor(current->xpn, prev);
     }
-    
-    node_t *next = current->next[0];
-    
-    // UPDATE value
-    if (next != NULL && next->key == key) {
-        current->next[0]->value = value;
+
+    update = current; 
+
+    while(current->next && current->next->key < key)
+        current = current->next;
+    // IF = UPDATE; ELSE = INSERT;
+    if (current->next && current->next->key == key) {
+        current->next->value = value;
         return;
     }
-    
-    node_t *newNode = (node_t *)malloc(sizeof(node_t));
-    newNode->key = key;
-    newNode->value = value;
-    int level = (key % 3) ? 1 : 2;
-    newNode->next = (node_t **)calloc(sizeof(node_t *), level);
-    
-    for (int i = 0; i < level; ++i) {
-        newNode->next[i] = update[i]->next[i];
-        update[i]->next[i] = newNode;
-    }
-    free(update);
-    list->size++;
 
+    node_t* new = (node_t*)malloc(sizeof(node_t));
+    char level = (key % FREQ) ? 1 : 2;
+
+    new->key = key;
+    new->value;
+    
+    new->xpn = NULL;
+
+    // Express Lane - XOR
+    if(level == 2){
+        new->xpn = xor(update, next);
+        if(next)
+            next->xpn = xor(xor(update, next->xpn), new);
+        update->xpn = xor(prev, new);
+    }
+
+    if(current->next)
+        current->next->prev = new;
+
+    new->next = current->next;
+    new->prev = current;
+    current->next = new;
+    free(update);
+    ++list->size;
 }
 
-void print(skip_list_t *l) {
+void print_list(d_skip_list_t* list){
+    node_t* current, *prev = NULL, *next = NULL;
+
+    for(int i = MAX_LEVEL - 1; i >= 0; --i){
+        current = list->head;
+        printf("Level %d: ", i + 1);
+
+        // Express lane
+        if(i == 1){
+            while(xor(current->xpn, prev)){
+                next = xor(current->xpn, prev);
+                prev = current;
+                current = next;
+                printf("%d (%d) ", current->value, current->key);
+            }
+        } else {
+            // Normal List
+            while(current->next){
+                current = current->next;
+                printf("%d (%d) ", current->value, current->key);
+            }
+        } NEW_LINE
+    }
+}
+
+/* void print(d_skip_list_t *l) {
     for (int i = MAX_LEVEL - 1; i >= 0; --i) {
         node_t *current = l->head;
         while (current->next[i] != NULL) {
@@ -81,7 +121,7 @@ void print(skip_list_t *l) {
 
 } 
 
-void destroy(skip_list_t *l) {
+void destroy(d_skip_list_t *l) {
     node_t *current, *next;
     next = l->head;
     
@@ -91,7 +131,7 @@ void destroy(skip_list_t *l) {
         free(current->next);
         free(current);
     }
-}
+} */
 
 int main() {
     d_skip_list_t l;
@@ -100,7 +140,8 @@ int main() {
     insert_update(&l, 6, 32);
     insert_update(&l, 4, 72);
     insert_update(&l, 3, 42);
-    print(&l);
-    destroy(&l);
+    print_list(&l);
+/*     print(&l);
+    destroy(&l) */;
     return 0;
 }
