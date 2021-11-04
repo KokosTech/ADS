@@ -74,11 +74,23 @@ size_t size_tree(node_t* root){
     return size_tree(root->left) + size_tree(root->right) + 1;
 }
 
+node_t* _helper_balancer(node_t* root, int* arr, size_t size){
+    if(size == 0){
+        return NULL;
+    }
+
+    int element = arr[size/2];
+    root = add(root, element);
+    _helper_balancer(root, arr, size / 2);
+    _helper_balancer(root, arr + size / 2 + 1, size - size / 2 - 1);
+    return root;
+}
+
 node_t* balance_tree(node_t* root){
     size_t tree_size = size_tree(root);
     int* arr = (int*)calloc(tree_size, sizeof(int));
     fetch_values(root, arr);
-
+    _helper_balancer(NULL, arr, tree_size);
 }
 
 int main() {
