@@ -93,6 +93,8 @@ node_t* balance_tree(node_t* root){
     _helper_balancer(NULL, arr, tree_size);
 }
 
+void print2DUtil(node_t *root, int space) {     size_t size = size_tree(root);         if (root == NULL)         return;           space += size;           print2DUtil(root->right, space);         printf("\n");     for (int i = size; i < space; i++)         printf(" ");     printf("%d\n", root->value);          print2DUtil(root->left, space); }   void print2D(node_t *root) {  print2DUtil(root, 0); } 
+
 int main() {
 	node_t *root = add(NULL, 15); 
 	root = add(root, 11);
@@ -107,5 +109,8 @@ int main() {
         printf("%d ", values[i]);
     } printf("\n"); */
 	//printTree(root);
+
+    root = balance_tree(root);
+    print2D(root);
 	return 0;
 }
