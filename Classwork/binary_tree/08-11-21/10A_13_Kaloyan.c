@@ -79,7 +79,7 @@ int is_identical(node_t* first_root, node_t* second_root){
 int check_if_subtree(node_t *root, node_t *subtree) {
     if(subtree == NULL)
         return 0;
-    if(is_identical(root->left, subtree) || is_identical(root->right, subtree))
+    if(is_identical(root->left, subtree) || is_identical(root->right, subtree) || is_identical(root, subtree))
         return 1;
 
     return check_if_subtree(root->left, subtree->left) && check_if_subtree(root->right, subtree->right);
@@ -101,15 +101,22 @@ int main(){
 	printf("\nSubtree:\n");
 	printTree(subroot);
 
-	node_t *subroot1 = add(NULL, 4); 
+	node_t *subroot1 = add(NULL, 3); 
 	subroot1 = add(subroot1, 8);
 	subroot1 = add(subroot1, -2);
+
+	node_t *root2 = add(NULL, 15); 
+	root2 = add(root2, 11);
+	root2 = add(root2, 8);
+	root2 = add(root2, -2);
+	root2 = add(root2, 20);
 
 	printf("\nNot aSubtree:\n");
 	printTree(subroot);
 
     printf("Check if subtree: %d\n", check_if_subtree(root, subroot));
 	printf("Check if subtree1: %d\n", check_if_subtree(root, subroot1));
+	printf("Check if root2: %d\n", check_if_subtree(root, root2));
 
     return 0;
 }
