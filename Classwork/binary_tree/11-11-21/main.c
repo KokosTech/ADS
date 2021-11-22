@@ -95,7 +95,38 @@ node_t* balance_tree(node_t* root){
 }
 
 
-void print2DUtil(node_t *root, int space) {     size_t size = size_tree(root);         if (root == NULL)         return;           space += size;           print2DUtil(root->right, space);         printf("\n");     for (int i = size; i < space; i++)         printf(" ");     printf("%d\n", root->value);          print2DUtil(root->left, space); }   void print2D(node_t *root) {  print2DUtil(root, 0); } 
+// Function to print binary tree in 2D
+// It does reverse inorder traversal
+void print2DUtil(node_t *root, int space)
+{
+    size_t size = sizeTree(root);
+	// Base case
+	if (root == NULL)
+		return;
+
+	// Increase distance between levels
+	space += size;
+
+	// Process right child first
+	print2DUtil(root->right, space);
+
+	// Print current node after space
+	// count
+	printf("\n");
+	for (int i = size; i < space; i++)
+		printf(" ");
+	printf("%d\n", root->value);
+
+	// Process left child
+	print2DUtil(root->left, space);
+}
+
+// Wrapper over print2DUtil()
+void printTree(node_t *root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
+}
 
 int is_balanced(node_t *root){
     if(root == NULL)
