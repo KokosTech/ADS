@@ -158,6 +158,56 @@ node_t *leftRotate(node_t *y) {
 	return x;
 }
 
+unsigned char _height(node_t *node, unsigned char level) {
+	if (node == NULL)
+		return level;
+
+	unsigned char right =  _height(node->right, level + 1);
+	unsigned char left = _height(node->left, level + 1);
+	
+	return right > left ? right : left;
+}
+
+unsigned char height(node_t *root) {
+	
+	return _height(root, 0);
+}
+
+char BF(node_t *root) {
+	return height(root->left) - height(root->right);
+}
+
+node_t *AVLInsert(node_t *root, int value) {
+	
+	if (root == NULL) {
+		node_t *newNode = (node_t *)malloc(sizeof(node_t));
+		newNode->left = NULL;
+		newNode->right = NULL;
+		newNode->val = value;
+		return newNode;
+	}
+
+	if (value < root->val) 
+		root->left = AVLInsert(root->left, value);
+	
+	else if (value > root->val) 
+		root->right = AVLInsert(root->right, value);
+	
+
+	// TODO
+	if (BF(root) > 1) {
+		if (BF(root->left) < 0)
+			root->left = leftRotate(root->left);
+		root = rightRotate(root);
+	} else if (BF(root) < -1) {
+		if (BF(root->right) > 0)
+			root->right = rightRotate(root->right);
+		root = leftRotate(root);
+	}
+
+	return root;
+}
+
 void* xor (void* a, void* b) {
 	return (void*)((uintptr_t)a ^ (uintptr_t)b);
 }
@@ -172,7 +222,7 @@ void split(node_t *tree, node_t **result1, node_t **result2){
     if(!tree) return; // bottom
     
     split(tree->left, result1, result2); 
-    *result1 = add(*result1, tree->val);
+    *result1 = AVLInsert(*result1, tree->val);
     swap(result1, result2);
     split(tree->right, result1, result2);
 }
