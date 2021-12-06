@@ -141,7 +141,6 @@ int get_shortest_distance(struct node_t *root, node_t *a, node_t *b){
     if (root->data < a->data && root->data < b->data)
         return get_shortest_distance(root->bigger, a, b); 
   
-  // if it has to be the root
     if (root->data >= a->data && root->data <= b->data) 
         return d_root(root, a) +  d_root(root, b); 
 } 

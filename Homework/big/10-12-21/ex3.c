@@ -214,7 +214,7 @@ void* xor (void* a, void* b) {
 
 void swap(node_t** a, node_t** b) {
     *a = (node_t*)xor(*a, *b);
-    *b = (node_t*)xor(*a, *b);
+    *b = (node_t*)xor(*b, *a);
     *a = (node_t*)xor(*a, *b);
 }
 
