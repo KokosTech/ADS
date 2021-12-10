@@ -55,13 +55,26 @@ size_t sizeTree(node_t *root) {
 	return sizeTree(root->left) + sizeTree(root->right) + 1;
 }
 
-// Not used - only for testing purposes - aka the 2 balance funcs
+// Freeing func
+
+node_t *destroy_tree(node_t *root){
+    if(!root) return NULL;
+
+    root->left = destroy_tree(root->left);
+    root->right = destroy_tree(root->right);
+
+    free(root);
+    return NULL;
+}
+
+// Balancing funcs 
 
 node_t *_helperBalancer(node_t *root, int *arr, size_t size) {
-	if (size == 0)
-		return NULL;
+	if (size == 0) return NULL;
+
 	int element = arr[size / 2];
 	root = add(root, element);
+
 	_helperBalancer(root, arr, size / 2);
 
 	_helperBalancer(root, arr + size / 2 + 1, size - (size / 2 + 1));
@@ -79,6 +92,7 @@ node_t *balanceTree(node_t *root) {
 
 	free(arr);
 	arr = NULL;
+	root = destroy_tree(root);
 	return newRoot;
 }
 
@@ -157,18 +171,6 @@ void split(node_t *tree, node_t **result1, node_t **result2){
     *result1 = add(*result1, tree->val);
     swap(result1, result2);
     split(tree->right, result1, result2);
-}
-
-// Freeing func
-
-node_t *destroy_tree(node_t *root){
-    if(!root) return NULL;
-
-    root->left = destroy_tree(root->left);
-    root->right = destroy_tree(root->right);
-
-    free(root);
-    return NULL;
 }
 
 int main(){
