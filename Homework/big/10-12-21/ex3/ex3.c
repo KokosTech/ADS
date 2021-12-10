@@ -202,6 +202,7 @@ int main(){
     fetchValues(tree, arr);
     for(size_t i = 0; i < sizeTree(tree); ++i)
         printf("%d ", arr[i]);
+	printf("\n");
 
 	// Freeing everything
 

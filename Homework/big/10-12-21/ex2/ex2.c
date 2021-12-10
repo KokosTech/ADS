@@ -41,16 +41,16 @@ int is_cyclic(node_t* node) {
 }
 
 void destroy_list(struct node_t **head){  
-  struct node_t *current = *head;
-  struct node_t *next;
+    struct node_t *current = *head;
+    struct node_t *next;
 
-  while (current != NULL) {
-    next = current->next;
-    free(current);
-    current = next;
-  }
+    while (current != NULL) {
+        next = current->next;
+        free(current);
+        current = next;
+    }
 
-  *head = NULL;
+    *head = NULL;
 }
 
 int main(){
