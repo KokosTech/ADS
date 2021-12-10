@@ -61,9 +61,13 @@ int main(){
     push(&head, 15);
     push(&head, 10);
     printf("[BEFORE] Is cyclic: %d\n", is_cyclic(head));
-    head->next->next->next->next = head->next;
+    head->next->next->next->next = head->next; // Cycling it
     printf("[AFTER] Is cyclic: %d\n", is_cyclic(head));
-    //destroy_list(&head); - FIX IT LATER - destroying a list with a loop - not a great idea
+
+    // Imma hard code it, so i don't have to make a function to remove the cycle
+    head->next->next->next->next = NULL;
+    destroy_list(&head); // - FIX IT LATER - destroying a list with a loop - not a great idea
+    head = NULL;
 
     return 0;
 }
