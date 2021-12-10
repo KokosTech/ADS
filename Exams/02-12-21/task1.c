@@ -117,7 +117,9 @@ void printTree(node_t *root){
 
 
 // Get the distance from the root to a node
-int d_root(struct node_t *root, node_t *x){ 
+int d_root(struct node_t *root, node_t *x){
+    if(!root)
+        return -1;
     if (root->data == x->data) 
         return 0; 
     else if (root->data > x->data) 
@@ -186,7 +188,7 @@ int main(){
 
     // Printing the distance
     //printf("%d\n", get_shortest_distance(root, first, second)); --- OLD
-    printf("%d\n", __get_shortest_distance(root, first, second));
+    printf("%d\n", __get_shortest_distance(root, root->smaller->bigger, root->smaller->smaller->smaller->smaller));
 
     // Cleaning everything up
     root = destroy_tree(root);
