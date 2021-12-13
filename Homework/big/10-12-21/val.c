@@ -191,6 +191,7 @@ node_t *parent(node_t *root, node_t *child) {
 }
 
 char BF(node_t *root) {
+	if (!root) return 0;
 	return height(root->left) - height(root->right);
 }
 
