@@ -23,7 +23,7 @@ int is_num(char *s){
 
 void print_help(){
     printf("dynamic.c HELP PAGE:\n\n");
-    printf("USSAGE: ./main.out -i [INIT_SIZE] -[OTHER_ARGS]\n\n");
+    printf("USAGE: ./main.out -i [INIT_SIZE] -[OTHER_ARGS]\n\n");
     printf("ARGS:\n");
     printf("-a : this arg calls the PUSH_BACK func, basically it adds / pushes a new element\n");
     printf("-b : this arg calls the BACK func, basically it returns the back element\n");
@@ -35,6 +35,11 @@ void print_help(){
 }
 
 int main(int argc, char **argv){
+    if(argc == 2 && (!strcmp(argv[1], "--help"))){
+        print_help();
+        exit(0);
+    }
+
     if(argc < 3){
         printf("NO INIT ARGS GIVEN\n");
         exit(-1);
@@ -60,8 +65,6 @@ int main(int argc, char **argv){
         case '-':
             if(!strcmp(argv[i], "--print"))
                 print_arr(arr);
-            else if(!strcmp(argv[i], "--help"))
-                print_help();
             break;
         case 'a':
             if(is_num(argv[++i])){
