@@ -61,9 +61,23 @@ hash_table_t *put(hash_table_t *hash_table, char *key, unsigned short value){
     return hash_table;
 }
 
-bool contains(){
+bool contains(hash_table_t * hash_table, char *key){
+    unsigned short bucket_num = hash(key) % hash_table->size;
+    if(hash_table->buckets[bucket_num]== NULL){
+        printf("NO SUCH KEY\n");
+        return false;
+    }
+    
+    pair_t* current = hash_table->buckets[bucket_num];
+    while(current != NULL){
+        if(!strcmp(current->key, key)){
+            return true;
+        }
+        current = current->next;
+    }
 
-
+    printf("NO SUCH KEY\n");
+    return false;
 }
 
 unsigned short get(hash_table_t * hash_table, char *key){
