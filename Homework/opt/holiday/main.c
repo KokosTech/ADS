@@ -26,7 +26,7 @@ int main(){
         printf("Enter num/opr: ");
             scanf("%s", buf);
 
-        if(!strcmp(buf, "exit")) {exit(0);}
+        if(!strcmp(buf, "exit")) {break;}
 
         if (is_num(buf)){
             sscanf(buf, "%lf", &buf2);
@@ -43,9 +43,9 @@ int main(){
                 arr->array[arr->size - 2] = pow(arr->array[arr->size - 2], back(arr));
                 pop(arr);
             } else if (buf[0] == '@'){
-                buf = buf + 1;
-                varnames = put(varnames, buf, back(arr));
-                printf("A varible with the name %s, with value of %lf, has been declared\n", buf, get(varnames, buf));
+                char *res = buf + 1;
+                varnames = put(varnames, res, back(arr));
+                printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
             } else if (!strcmp("++", buf)){
                 ++arr->array[arr->size - 1];
             } else {
@@ -63,12 +63,16 @@ int main(){
     free(arr);
     arr = NULL;
 
-    for(int i = 0; i < varnames->size; ++i){
-        free(varnames->buckets[i]->key);
-        varnames->buckets[i]->key = NULL;
-        free(varnames->buckets[i]);
-        varnames->buckets[i] = NULL;
-    }
+/*     for(int i = 0; i < varnames->size; ++i){
+        //free(varnames->buckets[i]->key);
+        //varnames->buckets[i]->key = NULL;
+        if(varnames->buckets[i] != NULL) {
+            free(varnames->buckets[i]->key);
+            varnames->buckets[i]->key = NULL;
+            free(varnames->buckets[i]);
+            varnames->buckets[i] = NULL;
+        }
+    } */
     free(varnames->buckets);
     varnames->buckets = NULL;
     free(varnames);
