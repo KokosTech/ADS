@@ -33,23 +33,19 @@ int main(){
             push_back(arr, buf2);
             buf2 = 0;
         } else {
-            if(arr->size >= 2){
-                if(!strcmp("+", buf)){
-                    arr->array[arr->size - 2] += back(arr);
-                    pop(arr);
-                } else if (!strcmp("/", buf)){
-                    arr->array[arr->size - 2] /= back(arr);
-                    pop(arr);
-                } else if (!strcmp("^", buf)){
-                    arr->array[arr->size - 2] = pow(arr->array[arr->size - 2], back(arr));
-                    pop(arr);
-                } else if (buf[0] == '@'){
-                    buf = buf + 1;
-                    varnames = put(varnames, buf, back(arr));
-                    printf("A varible with the name %s, with value of %lf, has been declared\n", buf, get(varnames, buf));
-                } else {
-                    printf("Unknown command\n");
-                }
+            if(!strcmp("+", buf) && arr->size >= 2){
+                arr->array[arr->size - 2] += back(arr);
+                pop(arr);
+            } else if (!strcmp("/", buf) && arr->size >= 2){
+                arr->array[arr->size - 2] /= back(arr);
+                pop(arr);
+            } else if (!strcmp("^", buf && arr->size >= 2)){
+                arr->array[arr->size - 2] = pow(arr->array[arr->size - 2], back(arr));
+                pop(arr);
+            } else if (buf[0] == '@'){
+                buf = buf + 1;
+                varnames = put(varnames, buf, back(arr));
+                printf("A varible with the name %s, with value of %lf, has been declared\n", buf, get(varnames, buf));
             } else if (!strcmp("++", buf)){
                 ++arr->array[arr->size - 1];
             } else {
