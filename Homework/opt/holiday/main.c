@@ -55,7 +55,23 @@ int main(){
         print_arr(arr);
     }
 
-    
+    // Freeing memory
+    free(buf);
+    buf = NULL;
+    free(arr->array);
+    arr->array = NULL;
+    free(arr);
+    arr = NULL;
 
+    for(int i = 0; i < varnames->size; ++i){
+        free(varnames->buckets[i]->key);
+        varnames->buckets[i]->key = NULL;
+        free(varnames->buckets[i]);
+        varnames->buckets[i] = NULL;
+    }
+    free(varnames->buckets);
+    varnames->buckets = NULL;
+    free(varnames);
+    varnames = NULL;
     return 0;
 }
