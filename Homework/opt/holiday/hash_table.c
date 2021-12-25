@@ -25,7 +25,7 @@ hash_table_t *init(size_t size){
 
 // HOMEWORK - Create a random hash func for a random struct
 
-hash_table_t *put(hash_table_t *hash_table, char *key, double value){
+hash_table_t *put(hash_table_t *hash_table, unsigned char *key, double value){
     pair_t *new_pair = (pair_t *)malloc(sizeof(pair_t));
     new_pair->key = key;
     new_pair->value = value;
@@ -55,7 +55,7 @@ hash_table_t *put(hash_table_t *hash_table, char *key, double value){
     return hash_table;
 }
 
-bool contains(hash_table_t * hash_table, char *key){
+bool contains(hash_table_t * hash_table, unsigned char *key){
     size_t bucket_num = hash(key) % hash_table->size;
     if(hash_table->buckets[bucket_num]== NULL){
         printf("NO SUCH KEY\n");
@@ -76,7 +76,7 @@ bool contains(hash_table_t * hash_table, char *key){
     return false;
 }
 
-double get(hash_table_t * hash_table, char *key){
+double get(hash_table_t * hash_table, unsigned char *key){
     size_t bucket_num = hash(key) % hash_table->size;
     if(hash_table->buckets[bucket_num]== NULL){
         printf("NO SUCH KEY\n");

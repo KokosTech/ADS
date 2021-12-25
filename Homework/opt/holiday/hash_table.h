@@ -8,7 +8,7 @@
 #include <stdbool.h>
 
 typedef struct pair{
-    char *key;
+    unsigned char *key;
     double value;
     struct pair *next;
 } pair_t;
@@ -20,8 +20,8 @@ typedef struct hash_table{
 
 size_t hash(unsigned char *str);
 hash_table_t *init(size_t size);
-hash_table_t *put(hash_table_t *hash_table, char *key, double value);
-bool contains(hash_table_t * hash_table, char *key);
-double get(hash_table_t * hash_table, char *key);
+hash_table_t *put(hash_table_t *hash_table, unsigned char *key, double value);
+bool contains(hash_table_t * hash_table, unsigned char *key);
+double get(hash_table_t * hash_table, unsigned char *key);
 
 
