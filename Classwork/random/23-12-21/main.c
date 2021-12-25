@@ -7,10 +7,9 @@
 // We can use switch: -i -b ....
 
 int is_num(char *s){
-    for (int i = 0; s[i]!= '\0'; i++){
-        if(isdigit(s[i]) == 0 && s[i] != '.')
+    for (int i = 0; s[i]!= '\0'; i++)
+        if(isdigit(s[i]) == 0 && s[i] != '.' && s[i] != '-')
               return 0;
-    }
     return 1;
 }
 
