@@ -65,13 +65,13 @@ bool contains(hash_table_t * hash_table, unsigned char *key){
     pair_t* current = hash_table->buckets[bucket_num];
     while(current != NULL){
         if(!strcmp(current->key, key)){
-            free(current);
+            //free(current);
             return true;
         }
         current = current->next;
     }
 
-    free(current);
+    //free(current);
     printf("NO SUCH KEY\n");
     return false;
 }
@@ -87,12 +87,12 @@ double get(hash_table_t * hash_table, unsigned char *key){
     while(current != NULL){
         if(!strcmp(current->key, key)){
             double result = current->value;
-            free(current);
+            //free(current);
             return result;
         }
         current = current->next;
     }
-    free(current);
+    //free(current);
     printf("NO SUCH KEY\n");
     return 0;
 }

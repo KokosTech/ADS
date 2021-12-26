@@ -44,15 +44,16 @@ int main(){
                 pop(arr);
             } else if (buf[0] == '@'){
                 char *res = buf + 1;
+                printf("AFTER res\n");
                 if(contains(varnames, res)){
-                    push_back(arr, get(varnames, res));
                     printf("A varible with the name %s already exists, pushing back value of %lf into the stack\n", res, get(varnames, res));
+                    push_back(arr, get(varnames, res));
                 } else {
                     varnames = put(varnames, res, back(arr));
                     pop(arr);
                     printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
                 }
-                
+                res = NULL;
             } else if (!strcmp("++", buf)){
                 ++arr->array[arr->size - 1];
             } else {
