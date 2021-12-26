@@ -45,8 +45,13 @@ int main(){
             } else if (buf[0] == '@'){
                 char *res = buf + 1;
                 varnames = put(varnames, res, back(arr));
-                pop(arr);
-                printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
+                if(contains(varnames, res)){
+                    push_back(arr, get(varnames, res));
+                } else {
+                    pop(arr);
+                    printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
+                }
+                
             } else if (!strcmp("++", buf)){
                 ++arr->array[arr->size - 1];
             } else {
