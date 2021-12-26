@@ -42,7 +42,7 @@ int main(){
             } else if (!strcmp("^", buf) && arr->size >= 2){
                 arr->array[arr->size - 2] = pow(arr->array[arr->size - 2], back(arr));
                 pop(arr);
-            } else if (buf[0] == '@'){
+            } else if (buf[0] == '@' && arr->size >= 1){
                 char *res = buf + 1;
                 printf("AFTER res\n");
                 if (contains(varnames, res)){
@@ -54,7 +54,7 @@ int main(){
                     printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
                 }
                 res = NULL;
-            } else if (!strcmp("++", buf)){
+            } else if (!strcmp("++", buf && arr->size >= 1)){
                 ++arr->array[arr->size - 1];
             } else {
                 printf("Unknown command\n");
