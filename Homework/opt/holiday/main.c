@@ -47,6 +47,7 @@ int main(){
                 varnames = put(varnames, res, back(arr));
                 if(contains(varnames, res)){
                     push_back(arr, get(varnames, res));
+                    printf("A varible with the name %s already exists, pushing back value of %lf into the stack\n", res, get(varnames, res));
                 } else {
                     pop(arr);
                     printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
