@@ -1,6 +1,6 @@
 #include "hash_table.h"
 
-size_t hash(unsigned char *str){
+size_t hash(char *str){
     size_t hash = 5381;
     int c;
 
@@ -9,7 +9,7 @@ size_t hash(unsigned char *str){
     return hash;
 }
 
-/* size_t hash(unsigned char *str){
+/* size_t hash(char *str){
     size_t str_l = strlen(str);
     return ((str[0] ^ str[(str_l - 1) / 2]) | (str[0] ^ str[str_l - 1]) | (str[str_l-1] ^ str[(str_l - 1) / 2])) + str_l;
 } */
@@ -25,9 +25,10 @@ hash_table_t *init(size_t size){
 
 // HOMEWORK - Create a random hash func for a random struct
 
-hash_table_t *put(hash_table_t *hash_table, unsigned char *key, double value){
-    pair_t *new_pair = (pair_t *)malloc(sizeof(pair_t));
-    new_pair->key = key;
+hash_table_t *put(hash_table_t *hash_table, char *key, double value){
+    pair_t *new_pair = (pair_t *)calloc(1, sizeof(pair_t));
+    new_pair->key = (char *)malloc(strlen(key) + 1);
+    strcpy(new_pair->key, key);
     new_pair->value = value;
 
     // ADD IF HEAD
@@ -55,8 +56,8 @@ hash_table_t *put(hash_table_t *hash_table, unsigned char *key, double value){
     return hash_table;
 }
 
-bool contains(hash_table_t * hash_table, unsigned char *key){
-    size_t bucket_num = hash(key) % hash_table->size;
+bool contains(hash_table_t *hash_table, char *key) {
+    unsigned short bucket_num = hash(key) % hash_table->size;
     if(hash_table->buckets[bucket_num]== NULL){
         printf("NO SUCH KEY\n");
         return false;
@@ -65,18 +66,15 @@ bool contains(hash_table_t * hash_table, unsigned char *key){
     pair_t* current = hash_table->buckets[bucket_num];
     while(current != NULL){
         if(!strcmp(current->key, key)){
-            //free(current);
             return true;
         }
         current = current->next;
     }
-
-    //free(current);
     printf("NO SUCH KEY\n");
     return false;
 }
 
-double get(hash_table_t * hash_table, unsigned char *key){
+double get(hash_table_t * hash_table, char *key){
     size_t bucket_num = hash(key) % hash_table->size;
     if(hash_table->buckets[bucket_num]== NULL){
         printf("NO SUCH KEY\n");
@@ -87,12 +85,29 @@ double get(hash_table_t * hash_table, unsigned char *key){
     while(current != NULL){
         if(!strcmp(current->key, key)){
             double result = current->value;
-            //free(current);
             return result;
         }
         current = current->next;
     }
-    //free(current);
     printf("NO SUCH KEY\n");
     return 0;
+}
+
+hash_table_t *destroy_table(hash_table_t *hash_table){
+    for(int i = 0; i < hash_table->size; i++){
+        pair_t *current = hash_table->buckets[i];
+        while(current != NULL){
+            pair_t *temp = current;
+            current = current->next;
+            free(temp->key);
+            temp->key = NULL;
+            free(temp);
+            temp = NULL;
+        }
+    }
+    free(hash_table->buckets);
+    hash_table->buckets = NULL;
+    free(hash_table);
+    hash_table = NULL;
+    return hash_table;
 }

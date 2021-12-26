@@ -7,7 +7,7 @@
 // #define get_name(var)  #var // this is a macro, btw
 // we'll use a hash table for the "dynamic" var names, since C isn't a scripting language
 
-int is_num(unsigned char *s){
+int is_num(char *s){
     for (int i = 0; s[i]!= '\0'; i++)
         if(isdigit(s[i]) == 0 && s[i] != '.' && s[i] != '-')
               return 0;
@@ -17,8 +17,8 @@ int is_num(unsigned char *s){
 int main(){
     dynamic_arr_t *arr = init_arr(DEFAULT_ALLOC_SIZE);
     hash_table_t *varnames = init(DEFAULT_ALLOC_SIZE);
-    unsigned char *buf;
-    buf = (unsigned char *)malloc(sizeof(unsigned char) * 256);
+    char *buf;
+    buf = (char *)malloc(sizeof(char) * 256);
     double buf2 = 0;
 
     while(1){
@@ -45,7 +45,7 @@ int main(){
             } else if (buf[0] == '@'){
                 char *res = buf + 1;
                 printf("AFTER res\n");
-                if(contains(varnames, res)){
+                if (contains(varnames, res)){
                     printf("A varible with the name %s already exists, pushing back value of %lf into the stack\n", res, get(varnames, res));
                     push_back(arr, get(varnames, res));
                 } else {
@@ -70,20 +70,5 @@ int main(){
     arr->array = NULL;
     free(arr);
     arr = NULL;
-
-/*     for(int i = 0; i < varnames->size; ++i){
-        //free(varnames->buckets[i]->key);
-        //varnames->buckets[i]->key = NULL;
-        if(varnames->buckets[i] != NULL) {
-            free(varnames->buckets[i]->key);
-            varnames->buckets[i]->key = NULL;
-            free(varnames->buckets[i]);
-            varnames->buckets[i] = NULL;
-        }
-    } */
-    free(varnames->buckets);
-    varnames->buckets = NULL;
-    free(varnames);
-    varnames = NULL;
-    return 0;
+    varnames = destroy_table(varnames);
 }
