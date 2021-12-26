@@ -42,13 +42,13 @@ int main(){
             } else if (!strcmp("^", buf) && arr->size >= 2){
                 arr->array[arr->size - 2] = pow(arr->array[arr->size - 2], back(arr));
                 pop(arr);
-            } else if (buf[0] == '@' && arr->size >= 1){
+            } else if (buf[0] == '@'){
                 char *res = buf + 1;
                 printf("AFTER res\n");
                 if (contains(varnames, res)){
                     printf("A varible with the name %s already exists, pushing back value of %lf into the stack\n", res, get(varnames, res));
                     push_back(arr, get(varnames, res));
-                } else {
+                } else if (arr->size >= 1){
                     varnames = put(varnames, res, back(arr));
                     pop(arr);
                     printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
