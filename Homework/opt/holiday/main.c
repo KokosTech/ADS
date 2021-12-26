@@ -54,7 +54,7 @@ int main(){
                     printf("A varible with the name %s, with value of %lf, has been declared\n", res, get(varnames, res));
                 }
                 res = NULL;
-            } else if (!strcmp("++", buf && arr->size >= 1)){
+            } else if (!strcmp("++", buf) && arr->size >= 1){
                 ++arr->array[arr->size - 1];
             } else {
                 printf("Unknown command\n");
