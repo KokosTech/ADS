@@ -20,10 +20,10 @@ int hash(char *str){
     return str[0];
 }
 
-int hash2(char *str){
+/* int hash2(char *str){
     size_t str_l = strlen(str);
     return ((str[0] ^ str[(str_l - 1) / 2]) | (str[0] ^ str[str_l - 1]) | (str[str_l-1] ^ str[(str_l - 1) / 2])) + str_l;
-}
+} */
 
 hash_table_t *init(size_t size){
     hash_table_t *hash_table = (hash_table_t *)malloc(sizeof(hash_table_t));
@@ -105,13 +105,14 @@ unsigned short get(hash_table_t * hash_table, char *key){
 }
 
 int main(){
-    //hash_table_t *hash_table = init(10);
-    //hash_table = put(hash_table, "KEY", 12);
-    //printf("%d\n", get(hash_table, "KEY"));
+    hash_table_t *hash_table = init(10);
+    hash_table = put(hash_table, "val", 12);
+    printf("%d\n", get(hash_table, "val"));
+    printf("%d\n", contains(hash_table, "v"));
 
     // TESTING H_FUNC2
 
-    printf("%d\n", hash2("Hllllllllo"));
-    printf("%d\n", hash2("Hollo"));
+    //printf("%d\n", hash2("Hllllllllo"));
+    //printf("%d\n", hash2("Hollo"));
     return 0;
 }
