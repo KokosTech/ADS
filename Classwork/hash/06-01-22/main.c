@@ -42,10 +42,14 @@ void table_add(struct table *t, int number) {
     }
 }
 
+void table_delete(struct table *t) {
+    free(t);
+}
+
 void table_print(struct table *t) {
     for (int i = 0; i < 8; i++) {
         int number = t->array[i];
-        printf("%d\n", number);
+        printf("[%d] %d, ", i, number);
     }
 }
 
