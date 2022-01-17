@@ -1,6 +1,6 @@
 #include "linkedlist.h"
 
-node_t *push(node_t *head, int start, int end){
+node_t *push(node_t *head, double start, double end){
     node_t* new_node = (node_t*)malloc(sizeof(node_t));
     new_node->start = start;
     new_node->end = end;
