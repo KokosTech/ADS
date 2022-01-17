@@ -8,3 +8,13 @@ node_t *push(node_t *head, int start, int end){
 
     return new_node;
 }
+
+node_t *destroy_list(node_t *head){
+    if(head == NULL)
+        return NULL;
+    destroy_list(head->next);
+    free(head);
+    head = NULL;
+    return NULL;
+}
+

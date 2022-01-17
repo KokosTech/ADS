@@ -12,7 +12,7 @@ $(ETARGET).o: $(ETARGET).c
 $(MTARGET).o: $(MTARGET).c
 	$(CC) -c $(CFLAGS) $(MTARGET).c
 
-generate: $(MTARGET).o tree.o
+generate: $(MTARGET).o $(ETARGET).o
 	$(CC) $(CFLAGS) $(MTARGET).o $(ETARGET).o -o $(ONAME).out
 
 clean: 

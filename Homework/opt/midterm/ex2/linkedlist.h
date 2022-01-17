@@ -11,3 +11,4 @@ typedef struct node_t{
 } node_t;
 
 node_t *push(node_t *head, int start, int end);
+node_t *destroy_list(node_t *head);
