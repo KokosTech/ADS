@@ -11,8 +11,6 @@ typedef struct tree{
 
 tree_t *add(tree_t *root, int value);
 
-size_t sizeTree(tree_t *root);
-
 int get_max_sum(tree_t *node);
 
 void printTree(tree_t *root);
