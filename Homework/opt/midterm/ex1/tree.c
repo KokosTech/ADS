@@ -17,6 +17,8 @@ tree_t *add(tree_t *root, int value) {
 	return root;
 }
 
+// Helper funcs
+
 size_t sizeTree(tree_t *root) {
 	if (root == NULL)
 		return 0;
@@ -39,6 +41,8 @@ unsigned char height(tree_t* root) {
     return _height(root, 0);
 }
 
+// Get Max Sum of Level Sums - algorithm - HW
+
 int __get_max_sum(tree_t *node, int level){
     if(node == NULL)
         return 0;
@@ -58,6 +62,7 @@ int __max(int *arr, size_t size){
         if(current_max < arr[i])
             current_max = arr[i];
 
+    free(arr);
     return current_max;
 }
 
@@ -68,6 +73,8 @@ int get_max_sum(tree_t *node){
         sums[i] = __get_max_sum(node, i);
     return __max(sums, levelCount);
 }
+
+// Printing
 
 void print2DUtil(tree_t *root, int space){
     size_t size = sizeTree(root);
@@ -89,4 +96,16 @@ void print2DUtil(tree_t *root, int space){
 
 void printTree(tree_t *root){
     print2DUtil(root, 0);
+}
+
+// Freeing 
+
+tree_t *destroy_tree(tree_t *root){
+    if(!root) return NULL;
+
+    root->left = destroy_tree(root->left);
+    root->right = destroy_tree(root->right);
+
+    free(root);
+    return NULL;
 }

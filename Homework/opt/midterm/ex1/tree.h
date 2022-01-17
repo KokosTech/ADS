@@ -16,3 +16,5 @@ size_t sizeTree(tree_t *root);
 int get_max_sum(tree_t *node);
 
 void printTree(tree_t *root);
+
+tree_t *destroy_tree(tree_t *root);

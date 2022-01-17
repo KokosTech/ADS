@@ -19,5 +19,6 @@ int main(){
 
     printf("Biggest sum: %d\n", get_max_sum(root));
     //printTree(root);
+    root = destroy_tree(root);
     return 0; 
 }
