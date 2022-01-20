@@ -1,14 +1,38 @@
 #include "linkedlist.h"
 
+double *xor (double *a, double *b) {
+	return (double *)((uintptr_t)a ^ (uintptr_t)b);
+}
+
+void swap(double *a, double *b) {
+    a = (double *)xor(a, b);
+    b = (double *)xor(b, a);
+    a = (double *)xor(a, b);
+}
+
 bool strict_sub_list(node_t *head) {
     if(head == NULL || head->next == NULL)
         return 1;
     
-    printf("S: %lf; NS: %lf\t", head->start, head->next->start);
-    printf("E: %lf; NE: %lf\n", head->end, head->next->end);
+    double _start = head->start, _end = head->end, _next_start = head->next->start, _next_end = head->next->end;
 
-    if((head->start <= head->next->start && head->end > head->next->end)
-    || (head->start < head->next->start && head->end >= head->next->end))
+    if(head->start > head->end){
+        _start = (uintptr_t)_start ^ (uintptr_t)_end;
+        _end = (uintptr_t)_end ^ (uintptr_t)_start;
+        _start = (uintptr_t)_start ^ (uintptr_t)_end;
+    }
+        
+    if(head->next->start > head->next->end){
+        _next_start = (uintptr_t)_next_start ^ (uintptr_t)_next_end;
+        _next_end = (uintptr_t)_next_end ^ (uintptr_t)_next_start;
+        _next_start = (uintptr_t)_next_start ^ (uintptr_t)_next_end;
+    }
+        
+    //printf("S: %lf; NS: %lf\t", _start, _next_start);
+    //printf("E: %lf; NE: %lf\n", _end, _next_end);
+
+    if((_start <= _next_start && _end > _next_end)
+    || (_start < _next_start && _end >= _next_end))
         return strict_sub_list(head->next);
 
     return 0;
@@ -19,7 +43,7 @@ int main(){
     head = push(head, 6, 11);
     head = push(head, 5, 11);
     head = push(head, 4, 11);
-    head = push(head, 3, 11);
+    head = push(head, 11, 3);
     head = push(head, 2, 11);
     head = push(head, 1, 11);
     head = push(head, -10, 11);
