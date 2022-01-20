@@ -1,15 +1,5 @@
 #include "linkedlist.h"
 
-double *xor (double *a, double *b) {
-	return (double *)((uintptr_t)a ^ (uintptr_t)b);
-}
-
-void swap(double *a, double *b) {
-    a = (double *)xor(a, b);
-    b = (double *)xor(b, a);
-    a = (double *)xor(a, b);
-}
-
 bool strict_sub_list(node_t *head) {
     if(head == NULL || head->next == NULL)
         return 1;
