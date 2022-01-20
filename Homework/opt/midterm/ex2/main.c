@@ -4,11 +4,11 @@ bool strict_sub_list(node_t *head) {
     if(head == NULL || head->next == NULL)
         return 1;
     
-    // printf("S: %lf; NS: %lf\t", head->start, head->next->start);
-    // printf("E: %lf; NE: %lf\n", head->end, head->next->end);
+    printf("S: %lf; NS: %lf\t", head->start, head->next->start);
+    printf("E: %lf; NE: %lf\n", head->end, head->next->end);
 
     if((head->start <= head->next->start && head->end > head->next->end)
-    || (head->start < head->next->start && head->end <= head->next->end))
+    || (head->start < head->next->start && head->end >= head->next->end))
         return strict_sub_list(head->next);
 
     return 0;
@@ -22,7 +22,7 @@ int main(){
     head = push(head, 3, 11);
     head = push(head, 2, 11);
     head = push(head, 1, 11);
-    head = push(head, -100, 100);
+    head = push(head, -10, 11);
     printf("%d\n", strict_sub_list(head));
     head = destroy_list(head);
     return 0;
