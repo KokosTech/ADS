@@ -1,21 +1,21 @@
+#pragma once
 #include <stdlib.h>
 #include <stdio.h>
 
-struct graph_node_t {
+typedef struct graph_node_t {
   int value;
   struct graph_node_t** items;
   int item_count;
-  
   char visited;
-};
+} graph_node_t;
 
-struct graph_node_t* init_graph_node(int value);
+graph_node_t* init_graph_node(int value);
 
-void connect_nodes(struct graph_node_t* a, struct graph_node_t* b);
+void connect_nodes(graph_node_t* a, graph_node_t* b);
 
-void add_node(struct graph_node_t* start, int new_value, int parent_value);
+void add_node(graph_node_t* start, int new_value, int parent_value);
 
-void print_node(struct graph_node_t* node) {
+void print_node(graph_node_t* node) {
   printf("value=%d item_count=%d visited=%d items=",
     node->value, node->item_count, node->visited
   );
@@ -25,6 +25,6 @@ void print_node(struct graph_node_t* node) {
   puts("");
 }
 
-struct graph_node_t* find_node(struct graph_node_t* start, int value);
+graph_node_t* find_node(graph_node_t* start, int value);
 
 
