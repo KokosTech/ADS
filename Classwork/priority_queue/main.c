@@ -86,6 +86,22 @@ void ppop(list_t* list){
     free(max_priority);
 }
 
+ char peek(list_t* list){
+    if (list->size == 0)
+        return NULL;
+    
+    node_t *current = list->head;
+    node_t *max_priority = list->head;
+    for(int i = 0; i < list->size; ++i){
+        if(max_priority->priority < current->priority){
+            max_priority = current;
+        }
+        current = current->next;
+    }
+
+    return max_priority->data;
+}
+
 void print_list(list_t list){
     node_t *c_node = list.head;
     while(c_node != NULL){
@@ -118,6 +134,7 @@ int main(){
     print_list(*list);
     ppop(list);
     print_list(*list);
+    printf("\nPeek: %d\n", peek(list));
 
     destroy(list);
     return 0;
