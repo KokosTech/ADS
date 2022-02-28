@@ -80,13 +80,13 @@ void ppop(list_t* list){
     if(max_priority->prev == NULL){
         list->head = max_priority->next;
         list->head->prev = NULL;
-    }
-    if(max_priority->next == NULL){
+    } else if (max_priority->next == NULL){
         list->tail = max_priority->prev;
         list->tail->next = NULL;
-    }
-    else
+    } else {
         max_priority->prev->next = max_priority->next;
+        max_priority->next->prev = max_priority->prev;
+    }
     
     --(list->size);
     free(max_priority);
