@@ -77,13 +77,20 @@ void ppop(list_t* list){
         current = current->next;
     }
 
-    if(max_priority->prev == NULL)
+    if(max_priority->prev == NULL){
         list->head = max_priority->next;
+        list->head->prev = NULL;
+    }
+    if(max_priority->next == NULL){
+        list->tail = max_priority->prev;
+        list->tail->next = NULL;
+    }
     else
         max_priority->prev->next = max_priority->next;
     
     --(list->size);
     free(max_priority);
+    max_priority = NULL;
 }
 
  char peek(list_t* list){
