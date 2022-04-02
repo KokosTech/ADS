@@ -105,8 +105,11 @@ int *bfs(int n, int m, int edges_rows, int edges_columns, int** edges, int s, in
     }
 
     free(visited);
+    visited = NULL;
     free(q->arr);
+    q->arr = NULL;
     free(q);
+    q = NULL;
     return result;
 }
 
@@ -151,9 +154,19 @@ int main(){
         }
 
         fprintf(fptr, "\n");
+        free(result);
+        result = NULL;
+        for(int i = 0; i < m; ++i) {
+            free(*(edges + i));
+            *(edges + i) = NULL;
+        }
+        free(edges);
+        edges = NULL;
+        free(first_multiple_input);
     }
 
     fclose(fptr);
+    fptr = NULL;
 
     return 0;
 }
