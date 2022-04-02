@@ -63,14 +63,20 @@ typedef struct queue {
     int pop;
 } queue_t;
 
-int *bfs(int n, int m, int edges_rows, int edges_columns, int** edges, int s, int* result_count) {    
+queue_t *init_queue(size_t size) {
     queue_t *q = (queue_t *)calloc(1, sizeof(queue_t));
-    q->arr = (int *)malloc((n + 1) * sizeof(int));
-    (*result_count) = n;
-    
-    int current;
+    q->arr = (int *)malloc((size + 1) * sizeof(int));
+    return q;
+}
+
+int *bfs(int n, int m, int edges_rows, int edges_columns, int** edges, int s, int* result_count) {    
+    int current = 0;
+    *result_count = n;
+
     int *visited = (int *)calloc(n, sizeof(int));
     int *result = (int *)malloc((n) * sizeof(int));
+    
+    queue_t *q = init_queue(n);
     
     for(int i = 0; i < n; ++i)
         *(result + i) = -1; 
@@ -81,30 +87,26 @@ int *bfs(int n, int m, int edges_rows, int edges_columns, int** edges, int s, in
 
     while(q->push != q->pop){ 
         current = q->arr[q->pop++];
-        
-        for(int i = 0; i < edges_rows; ++i){
-            int index = -1;
-            
-            if(edges[i][0] == current)
-                index = edges[i][1] - 1;
-            else if(edges[i][1] == current) 
-                index = edges[i][0] - 1;
-            
-            if(index != -1) {
-                // checkung if distance is smaller than current or better than infinity
-                if(result[index] > result[current - 1] + EDGE_W || result[index] == -1)
-                    result[index] = result[current - 1] + EDGE_W;
-                
-                // checking if node is not visited
-                if(visited[index] == 0){
-                    q->arr[q->push++] = index + 1;
-                    visited[index] = 1;
+
+        for(int i = 0; i < edges_rows; ++i) { 
+            for(char j = 0; j < 2; ++j) {
+                if(edges[i][j] == current && visited[edges[i][!j] - 1] == 0) {
+                    visited[edges[i][!j] - 1] = 1;
+
+                    int *temp = &result[edges[i][!j] - 1];
+                    (*temp) = ((*temp) > result[current - 1] + EDGE_W || (*temp) == -1) ? result[current - 1] + EDGE_W :(*temp);
+                    temp = NULL;
+
+                    q->arr[q->push++] = edges[i][!j];
+                    break;
                 }
             }
         }
     }
 
     free(visited);
+    free(q->arr);
+    free(q);
     return result;
 }
 
