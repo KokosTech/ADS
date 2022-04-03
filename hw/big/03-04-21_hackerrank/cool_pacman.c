@@ -83,7 +83,7 @@ void resize_stack(stack_t *stack) {
 
 // Add
 
-void *add_route(notmac_route_t *route, int r, int c) {
+void add_route(notmac_route_t *route, int r, int c) {
     if(route->count == route->capacity)
         resize_route(route);
 
