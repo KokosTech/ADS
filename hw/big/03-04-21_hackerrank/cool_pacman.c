@@ -4,6 +4,7 @@
 #include <math.h>
 
 #define DIRS 4
+#define DEF_CAP 10
 #define DEBUG_CAP 1000
 
 typedef struct pair_t {
@@ -71,17 +72,18 @@ stack_t *init_stack(size_t size) {
 // Dynamic
 
 void resize_route(notmac_route_t *route){
-    route->pairs = realloc(route->pairs, sizeof(pair_t) * route->count * 2);
+    route->pairs = (pair_t **)realloc(route->pairs, sizeof(pair_t *) * route->capacity * 2);
+    route->capacity *= 2;
 }
 
 void resize_stack(stack_t *stack) {
-    stack->elements = realloc(stack->elements, sizeof(stack_element_t *) * stack->capacity * 2);
+    stack->elements = (stack_element_t **)realloc(stack->elements, sizeof(stack_element_t *) * stack->capacity * 2);
     stack->capacity *= 2;
 }
 
 // Add
 
-notmac_route_t *add_route(notmac_route_t *route, int r, int c) {
+void *add_route(notmac_route_t *route, int r, int c) {
     if(route->count == route->capacity)
         resize_route(route);
 
@@ -89,35 +91,71 @@ notmac_route_t *add_route(notmac_route_t *route, int r, int c) {
     pair->r = r;
     pair->c = c;
     route->pairs[route->count++] = pair;
+}
 
-    return route;
+void add_to_stack(stack_t *stack, stack_element_t *element) {
+    if(stack->top + 1 == stack->capacity)
+        resize_stack(stack);
+
+    stack->elements[++stack->top] = element;
+}
+
+stack_element_t *pop_from_stack(stack_t *stack) {
+    if(stack == NULL || stack->top == -1)
+        return NULL;
+
+    stack_element_t *element = stack->elements[stack->top--];
+
+    return element;
+}
+
+// Freeing memory
+
+void destroy_route(notmac_route_t *route) {
+    if(route == NULL) return;
+    for(int i = 0; i < route->count; ++i)
+        if(!route->pairs[i])
+            free(route->pairs[i]);
+
+    free(route->pairs);
+    free(route);
+}
+
+void destroy_stack_element(stack_element_t *element) {
+    if(element == NULL) return;
+    destroy_route(element->route);
+    free(element->pair);
+    free(element);
+}
+
+void destroy_stack(stack_t *stack) {
+    if(stack == NULL) return;
+
+    for(int i = 0; i < stack->top; ++i)
+        destroy_stack_element(stack->elements[i]);
+    free(stack->elements);
+    free(stack);
 }
 
 void dfs(int r, int c, int pacman_r, int pacman_c, int food_r, int food_c, char grid[r][c]) {
-    char **board = malloc(sizeof(char *) * r);for (int i = 0; i < r; i++) {
-        board[i] = malloc(sizeof(char) * c);
-        memcpy(board[i], grid[i], sizeof(char) * c);
-    }
+    notmac_route_t *visited = init_routes(DEF_CAP);
+    notmac_route_t *result = NULL;
 
-    notmac_route_t *visited = init_routes(DEBUG_CAP);
-    notmac_route_t *result = init_routes(DEBUG_CAP);
-
-    stack_t *stack = init_stack(DEBUG_CAP);
+    stack_t *stack = init_stack(DEF_CAP);
 
     int directions[][2] = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
 
-    stack_element_t *start = init_stack_element(init_pair(pacman_r, pacman_c), DEBUG_CAP);
-    stack->elements[++stack->top] = start;
+    stack_element_t *start = init_stack_element(init_pair(pacman_r, pacman_c), DEF_CAP);
+    add_to_stack(stack, start);
 
     while (stack->top != -1) {
-        stack_element_t *temp = stack->elements[stack->top--];
+        stack_element_t *temp = pop_from_stack(stack);
         
-        temp->route = add_route(temp->route, temp->pair->r, temp->pair->c);
-        visited = add_route(visited, temp->pair->r, temp->pair->c);
+        add_route(temp->route, temp->pair->r, temp->pair->c);
+        add_route(visited, temp->pair->r, temp->pair->c);
 
         if (temp->pair->r == food_r && temp->pair->c == food_c){
-            for (size_t i = 0; i < temp->route->count; ++i, ++result->count)
-                result->pairs[i] = temp->route->pairs[i];
+            result = temp->route;
             break;
         }
 
@@ -125,17 +163,12 @@ void dfs(int r, int c, int pacman_r, int pacman_c, int food_r, int food_c, char 
             int next_r = temp->pair->r + directions[i][0];
             int next_c = temp->pair->c + directions[i][1];
 
-            if (next_r < 0 || next_r >= r || next_c < 0 && next_c >= r)
-                continue;
-
-            if (board[next_r][next_c] == '-' || board[next_r][next_c] == '.'){
-                board[next_r][next_c] = '=';
-                stack_element_t *new_stack_element = init_stack_element(init_pair(next_r, next_c), DEBUG_CAP);
+            if (grid[next_r][next_c] == '-' || grid[next_r][next_c] == '.'){
+                grid[next_r][next_c] = '=';
+                stack_element_t *new_stack_element = init_stack_element(init_pair(next_r, next_c), temp->route->capacity);
                 new_stack_element->route->count = temp->route->count;
                 memcpy(new_stack_element->route->pairs, temp->route->pairs, sizeof(pair_t) * temp->route->count);
-/*                 for (size_t i = 0; i < temp.count; ++i)
-                    newEl.routes[i] = temp.routes[i]; */
-                stack->elements[++stack->top] = new_stack_element;
+                add_to_stack(stack, new_stack_element);
             }
         }
     }
@@ -150,30 +183,8 @@ void dfs(int r, int c, int pacman_r, int pacman_c, int food_r, int food_c, char 
     
     // Freeing memory
 
-/*     for (size_t i = 0; i < result->count; ++i)
-        free(result->pairs[i]);
-    free(result->pairs);
-    free(result);
-
-    for (int i = 0; i < r; i++)
-        free(board[i]);
-    free(board);
-
-    for (size_t i = 0; i < stack->top; ++i) {
-        for (size_t j = 0; j < stack->elements[i]->route->count; ++j)
-            //free(stack->elements[i]->route->pairs[j]);
-        free(stack->elements[i]->route->pairs);
-        free(stack->elements[i]->route);
-        free(stack->elements[i]);
-    }
-
-    free(stack->elements);
-    free(stack);
-
-    for (size_t i = 0; i < visited->count; ++i)
-        free(visited->pairs[i]);
-    free(visited->pairs);
-    free(visited); */
+    destroy_route(visited);
+    destroy_stack(stack);
 
     return;
 }
