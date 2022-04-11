@@ -12,7 +12,7 @@ typedef struct queue{
     struct graph_node_t *arr[1000];
     int push;
     int pop;
-}que;
+}queue_t;
 
 struct graph_node_t* init_graph_node(int value);
 
@@ -127,7 +127,7 @@ int bfs(struct graph_node_t *start, struct graph_node_t *end)
     if(!start || !end)
         return 0;
       
-    que queue;
+    queue_t queue;
     queue.push = 0;
     queue.pop = 0;
 

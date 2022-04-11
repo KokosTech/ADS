@@ -17,7 +17,7 @@ typedef struct queue{
     struct graph_node_t *arr[1000];
     int push;
     int pop;
-}que;
+}queue_t;
 
 struct graph_node_t* init_graph_node(int value);
 

@@ -168,6 +168,7 @@ void dfs(int r, int c, int pacman_r, int pacman_c, int food_r, int food_c, char 
                 stack_element_t *new_stack_element = init_stack_element(init_pair(next_r, next_c), temp->route->capacity);
                 new_stack_element->route->count = temp->route->count;
                 memcpy(new_stack_element->route->pairs, temp->route->pairs, sizeof(pair_t) * temp->route->count);
+                
                 add_to_stack(stack, new_stack_element);
             }
         }

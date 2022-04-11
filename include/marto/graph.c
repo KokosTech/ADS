@@ -84,7 +84,7 @@ int bfs(struct graph_node_t *start, struct graph_node_t *end){
     if(!start || !end)
         return 0;
       
-    que queue;
+    queue_t queue;
     queue.push = 0;
     queue.pop = 0;
 
