@@ -15,8 +15,6 @@ typedef struct map {
 } map_t;
 
 map_t *init_map(size_t size);
-pair_t *add_pair(const char *key, US *value, pair_t *next);
-
 map_t *put(map_t *map, const char *key, US *value);
 bool contains(map_t *map, const char *key);
 US get_value(map_t *map, const char *key);
