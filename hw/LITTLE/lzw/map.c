@@ -1,118 +1,90 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h>
 
-// 16-12-21 - do PUT, GET, CONTAINS
+#include "map.h"
 
-typedef struct pair{
-    char *key;
-    unsigned short value;
-    struct pair *next;
-} pair_t;
-
-typedef struct hash_table{
-    pair_t **buckets;
-    size_t size;
-} hash_table_t;
-
-int hash(char *str){
-    return str[0];
-}
-
-/* int hash2(char *str){
+// HASH function from the interwebs
+int hash(char *str) {
     size_t str_l = strlen(str);
     return ((str[0] ^ str[(str_l - 1) / 2]) | (str[0] ^ str[str_l - 1]) | (str[str_l-1] ^ str[(str_l - 1) / 2])) + str_l;
-} */
-
-hash_table_t *init(size_t size){
-    hash_table_t *hash_table = (hash_table_t *)malloc(sizeof(hash_table_t));
-
-    hash_table->size = size;
-    hash_table->buckets = (pair_t **)calloc(size, sizeof(pair_t *));
-    
-    return hash_table;
 }
 
-// HOMEWORK - Create a random hash func for a random struct
+map_t *init_map(size_t size) {
+    map_t *map = (map_t *)malloc(sizeof(map_t));
 
-hash_table_t *put(hash_table_t *hash_table, char *key, unsigned short value){
+    map->size = size;
+    map->buckets = (pair_t **)calloc(size, sizeof(pair_t *));
+
+    return map;
+}
+
+pair_t *add_pair(const char *key, US *value, pair_t *next) {
     pair_t *new_pair = (pair_t *)malloc(sizeof(pair_t));
     new_pair->key = key;
-    new_pair->value = value;
+    new_pair->value = *value;
+    new_pair->next = next;
+
+    return new_pair;
+}
+
+map_t *put(map_t *map, const char *key, US *value) {
+    if(!map) return NULL;
+
+    size_t bucket_num = hash(key) % map->size;
 
     // ADD IF HEAD
-    unsigned short bucket_num = hash(key) % hash_table->size;
-    if(hash_table->buckets[bucket_num] == NULL){
-        hash_table->buckets[bucket_num] = new_pair;
-        return hash_table;
+    if (!map->buckets[bucket_num]) {
+        map->buckets[bucket_num] = add_pair(key, value, NULL);
+        return map;
     }
 
-    new_pair->next = hash_table->buckets[bucket_num];
-    
-    // CHECK FOR THE SAME KEY
-    pair_t* current = hash_table->buckets[bucket_num];
-    while(current != NULL){
-        if(!strcmp(current->key, key)){
-            current->value = value;
+    // UPDATE
+    pair_t *current = map->buckets[bucket_num];
+    while (current) {
+        if (!strcmp(current->key, key)) {
+            current->value = *value;
             break;
         }
         current = current->next;
     }
 
     // IF NOT - ADD A NEW ELLEMENT
-    hash_table->buckets[bucket_num] = new_pair;
-    
-    return hash_table;
+    map->buckets[bucket_num] = add_pair(key, value, map->buckets[bucket_num]);
+
+    return map;
 }
 
-bool contains(hash_table_t * hash_table, char *key){
-    unsigned short bucket_num = hash(key) % hash_table->size;
-    if(hash_table->buckets[bucket_num]== NULL){
-        printf("NO SUCH KEY\n");
-        return false;
-    }
-    
-    pair_t* current = hash_table->buckets[bucket_num];
-    while(current != NULL){
-        if(!strcmp(current->key, key)){
+bool contains(map_t *map, const char *key) {
+    if(!map) return false;
+
+    size_t bucket_num = hash(key) % map->size;
+    if(!map->buckets[bucket_num]) return false;
+
+    pair_t *current = map->buckets[bucket_num];
+    while (current) {
+        if (!strcmp(current->key, key)) {
             return true;
         }
         current = current->next;
     }
 
-    printf("NO SUCH KEY\n");
     return false;
 }
 
-unsigned short get(hash_table_t * hash_table, char *key){
-    unsigned short bucket_num = hash(key) % hash_table->size;
-    if(hash_table->buckets[bucket_num]== NULL){
-        printf("NO SUCH KEY\n");
-        return 0;
-    }
-    
-    pair_t* current = hash_table->buckets[bucket_num];
-    while(current != NULL){
-        if(!strcmp(current->key, key)){
+US get_value(map_t *map, const char *key) {
+    if(!map) return 0;
+
+    size_t bucket_num = hash(key) % map->size;
+    if(!map->buckets[bucket_num]) return 0;
+
+    pair_t *current = map->buckets[bucket_num];
+    while (current) {
+        if (!strcmp(current->key, key)) {
             return current->value;
         }
         current = current->next;
     }
 
-    printf("NO SUCH KEY\n");
-    return 0;
-}
-
-int main(){
-    hash_table_t *hash_table = init(10);
-    hash_table = put(hash_table, "val", 12);
-    printf("%d\n", get(hash_table, "val"));
-    printf("%d\n", contains(hash_table, "v"));
-
-    // TESTING H_FUNC2
-
-    //printf("%d\n", hash2("Hllllllllo"));
-    //printf("%d\n", hash2("Hollo"));
     return 0;
 }
