@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 
 #include "map.h"
@@ -19,16 +20,17 @@ map_t *init_map(size_t size) {
     return map;
 }
 
-pair_t *add_pair(const char *key, US *value, pair_t *next) {
+pair_t *add_pair(const char *key, US value, pair_t *next) {
     pair_t *new_pair = (pair_t *)malloc(sizeof(pair_t));
-    new_pair->key = key;
-    new_pair->value = *value;
+    new_pair->key = malloc(sizeof(char) * (strlen(key) + 1));
+    strcpy(new_pair->key, key);
+    new_pair->value = value;
     new_pair->next = next;
 
     return new_pair;
 }
 
-map_t *put(map_t *map, const char *key, US *value) {
+map_t *put(map_t *map, const char *key, US value) {
     if(!map) return NULL;
 
     size_t bucket_num = hash(key) % map->size;
@@ -43,7 +45,7 @@ map_t *put(map_t *map, const char *key, US *value) {
     pair_t *current = map->buckets[bucket_num];
     while (current) {
         if (!strcmp(current->key, key)) {
-            current->value = *value;
+            current->value = value;
             break;
         }
         current = current->next;
@@ -87,4 +89,18 @@ US get_value(map_t *map, const char *key) {
     }
 
     return 0;
+}
+
+void print(map_t *map) {
+    if(!map) return;
+
+    for (size_t i = 0; i < map->size; i++) {
+        if(!map->buckets[i]) continue;
+
+        pair_t *current = map->buckets[i];
+        while (current) {
+            printf("%d: %d\n", current->key, current->value);
+            current = current->next;
+        }
+    }
 }
