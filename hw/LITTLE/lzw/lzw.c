@@ -7,11 +7,12 @@
 #include "queue.h"
 #include "lzw.h"
 
-#define SCHAR 2
-#define DEF_BUFFER 3
+#define SCHAR 2 // single char
+#define DEF_BUFFER 3 // default buffer size
 
 char *cat(char *s1, char *s2) {
     if(!s1 || !s2) return NULL;
+
     char *result = malloc(strlen(s1) + strlen(s2) + 1);
     strcpy(result, s1);
     strcat(result, s2);
@@ -21,20 +22,25 @@ char *cat(char *s1, char *s2) {
 
 char *to_string(short val) {
     char *result = malloc(sizeof(char) * SCHAR);
+
     result[0] = (unsigned char)val;
     result[1] = '\0';
+
     return result;
 }
 
 char *n_to_s(short val) {
     char *res = malloc(sizeof(char) * SCHAR * 3);
+
     sprintf(res, "%hu", val);
+
     return res;
 }
 
 void add_ascii(map_t *map) {
     if(!map) return;
-    unsigned char *init_char = malloc(sizeof(unsigned char) * SCHAR);
+
+    char *init_char = malloc(sizeof(char) * SCHAR);
     
     for(unsigned short i = 0; i < ASCII; ++i) {
         init_char[0] = (unsigned char)i;
@@ -47,7 +53,8 @@ void add_ascii(map_t *map) {
 
 void add_ascii_r(map_t *map) {
     if(!map) return;
-    unsigned char *init_char = malloc(sizeof(unsigned char) * SCHAR);
+
+    char *init_char = malloc(sizeof(char) * SCHAR);
     
     for(unsigned short i = 0; i < ASCII; ++i) {
         init_char[0] = (unsigned char)i;
@@ -70,7 +77,7 @@ node_t *lzw_encode(char *string) {
 
     buffer[buff_c++] = string[str_c++];
 
-    while(string[str_c] != '\0') {
+    while(string[str_c]) {
         buffer[buff_c++] = string[str_c++];
         buffer[buff_c] = '\0';
 
@@ -79,7 +86,7 @@ node_t *lzw_encode(char *string) {
         if(!contains(map, buffer)) {
             char* substring = malloc(sizeof(char) * (buff_c - 0));
             
-            for(int i = 0; i < buff_c - 1; ++i) 
+            for(size_t i = 0; i < buff_c - 1; ++i) 
                 substring[i] = buffer[i];
             substring[buff_c - 1] = '\0';
 
@@ -103,8 +110,6 @@ node_t *lzw_encode(char *string) {
 
     return head;
 }
-
-
 
 /*
     *    PSEUDOCODE
@@ -147,7 +152,7 @@ char *lzw_decode(node_t *head) {
     //current = current->next;
 
     while(head) {
-        printf("WHILE: %s\n", temp_str);
+        //printf("WHILE: %s\n", temp_str);
         new = head->val;
 
         if(contains(map, n_to_s(new)))

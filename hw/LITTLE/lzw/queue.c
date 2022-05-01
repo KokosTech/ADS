@@ -44,8 +44,7 @@ void print_queue(node_t *head) {
 }
 
 node_t *destroy_list(node_t *head){
-    if(head == NULL)
-        return NULL;
+    if(!head) return NULL;
     destroy_list(head->next);
     free(head);
     head = NULL;

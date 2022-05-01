@@ -6,7 +6,7 @@
 #include "map.h"
 
 // HASH function from the interwebs
-int hash(char *str) {
+int hash(const char *str) {
     size_t str_l = strlen(str);
     return ((str[0] ^ str[(str_l - 1) / 2]) | (str[0] ^ str[str_l - 1]) | (str[str_l-1] ^ str[(str_l - 1) / 2])) + str_l;
 }
@@ -93,18 +93,4 @@ char *get_value(map_t *map, const char *key) {
     }
 
     return NULL;
-}
-
-void print(map_t *map) {
-    if(!map) return;
-
-    for (size_t i = 0; i < map->size; i++) {
-        if(!map->buckets[i]) continue;
-
-        pair_t *current = map->buckets[i];
-        while (current) {
-            printf("%s: %s\n", current->key, current->value);
-            current = current->next;
-        }
-    }
 }

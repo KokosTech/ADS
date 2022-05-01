@@ -12,4 +12,3 @@
 
 node_t *lzw_encode(char *string);
 char *lzw_decode(node_t *head);
- void add_ascii(map_t *map);
