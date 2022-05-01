@@ -135,18 +135,16 @@ char *lzw_decode(node_t *head) {
 
     char* temp_str = calloc(sizeof(char), 1);
     short new_sym = 0;
-    node_t *current, *next;
     char *old = malloc(sizeof(char) * 50);
     char *new = malloc(sizeof(char) * 50);
 
-    current = head;
     old = n_to_s(current->val);
     temp_str = cat(temp_str, old);
 
     head = pop(head);
     //current = current->next;
 
-    while(current) {
+    while(head) {
         printf("WHILE: %s\n", temp_str);
         new = n_to_s(head->val);
         temp_str = cat(temp_str, get_value(map, new));
@@ -158,6 +156,7 @@ char *lzw_decode(node_t *head) {
         printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
         if(!contains(map, n_to_s(ASCII + new_sym))) {
             result = cat(result, get_value(map, old));
+            printf("TS -> %s\n", temp_str);
             put(map, n_to_s(ASCII + new_sym++), temp_str);
             memset(temp_str, 0, strlen(temp_str));
             strcpy(old, new);
