@@ -84,53 +84,59 @@ char *to_string(short val) {
     return result;
 }
 
+/*
+    *    PSEUDOCODE
+    1    Initialize table with single character strings
+    2    OLD = first input code // current
+    3    output translation of OLD
+    4    WHILE not end of input stream
+    5        NEW = next input code // next
+    6        IF NEW is not in the string table
+    7               S = translation of OLD
+    8               S = S + C
+    9       ELSE
+    10              S = translation of NEW
+    11       output S
+    12       C = first character of S
+    13       OLD + C to the string table
+    14       OLD = NEW
+    15   END WHILE
+*/
+
 char *lzw_decode(node_t *head) {
     map_t *map = init_map(ASCII);
-    char *result = malloc(sizeof(char) * SCHAR);
+    char *result = malloc(sizeof(char));
     
     result[0] = '\0';
 
     add_ascii(map);
 
-    printf("yooo\n");
     char* temp_str = calloc(sizeof(char), 1);
     short new_sym = 0;
     node_t *current, *next;
 
     current = head;
-    result[0] = (unsigned char)current->val;
-    result[1] = '\0';
+    temp_str = cat(temp_str, to_string(current->val));
 
     pop(&current);
 
     while(current->next) {
-        printf("oho\n");
-        printf("%d\n", current->val);
-        next = current->next;
+        printf("WHILE: %s\n", temp_str);
+        next = current;
         
-        result = cat(result, to_string(next->val));
+        temp_str = cat(temp_str, to_string(get_value(map, to_string(next->val))));
         pop(&current);
 
-        printf("before if\n");
         if(!contains(map, to_string(ASCII + new_sym))) {
-            printf("too\n");
-            result = cat(result, to_string(current->val));
+            result = cat(result, to_string(get_value(map, to_string(current->val))));
             put(map, temp_str, ASCII + new_sym++);
+            memset(temp_str, 0, strlen(temp_str));
             current = next;
-            result = cat(result, to_string(current->val));
+            temp_str = cat(temp_str,  to_string(get_value(map, to_string(current->val))));
         }
-
-
-/*         if(!contains(map, current->val)) {
-            put(map, current->val, current->val);
-            result = cat(result, current->val);
-        } else {
-            result = cat(result, get_value(map, current->val));
-        }
-        current = current->next; */
     }
-            printf("too end\n");
-    cat(result, to_string(current->val));
+
+    result = cat(result, to_string(get_value(map, to_string(current->val))));
 
     return result;
 }
