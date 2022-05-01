@@ -24,10 +24,12 @@ void push(node_t **head, short val){
     current->next = create_node(val);
 }
 
-void pop(node_t **head){
-    if(!(*head)) return;
-
-    (*head) = (*head)->next;
+node_t *pop(node_t *head){
+    if(!head) return NULL;
+    node_t *current = head;
+    head = head->next;
+    free(current);
+    return head;
 }
 
 void print_queue(node_t *head) {

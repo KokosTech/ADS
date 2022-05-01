@@ -11,6 +11,11 @@ int hash(char *str) {
     return ((str[0] ^ str[(str_l - 1) / 2]) | (str[0] ^ str[str_l - 1]) | (str[str_l-1] ^ str[(str_l - 1) / 2])) + str_l;
 }
 
+void _strdup(char **dest, const char *src) {
+    *dest = malloc(sizeof(char) * (strlen(src) + 1));
+    strcpy(*dest, src);
+}
+
 map_t *init_map(size_t size) {
     map_t *map = (map_t *)malloc(sizeof(map_t));
 
@@ -20,17 +25,16 @@ map_t *init_map(size_t size) {
     return map;
 }
 
-pair_t *add_pair(const char *key, US value, pair_t *next) {
+pair_t *add_pair(const char *key, const char  *value, pair_t *next) {
     pair_t *new_pair = (pair_t *)malloc(sizeof(pair_t));
-    new_pair->key = malloc(sizeof(char) * (strlen(key) + 1));
-    strcpy(new_pair->key, key);
-    new_pair->value = value;
+    _strdup(&new_pair->key, key);
+    _strdup(&new_pair->value, value);
     new_pair->next = next;
 
     return new_pair;
 }
 
-map_t *put(map_t *map, const char *key, US value) {
+map_t *put(map_t *map, const char *key, const char *value) {
     if(!map) return NULL;
 
     size_t bucket_num = hash(key) % map->size;
@@ -45,7 +49,7 @@ map_t *put(map_t *map, const char *key, US value) {
     pair_t *current = map->buckets[bucket_num];
     while (current) {
         if (!strcmp(current->key, key)) {
-            current->value = value;
+            _strdup(&current->value, value);
             break;
         }
         current = current->next;
@@ -74,11 +78,11 @@ bool contains(map_t *map, const char *key) {
     return false;
 }
 
-US get_value(map_t *map, const char *key) {
-    if(!map) return 0;
+char *get_value(map_t *map, const char *key) {
+    if(!map) return NULL;
 
     size_t bucket_num = hash(key) % map->size;
-    if(!map->buckets[bucket_num]) return 0;
+    if(!map->buckets[bucket_num]) return NULL;
 
     pair_t *current = map->buckets[bucket_num];
     while (current) {
@@ -88,7 +92,7 @@ US get_value(map_t *map, const char *key) {
         current = current->next;
     }
 
-    return 0;
+    return NULL;
 }
 
 void print(map_t *map) {
@@ -99,7 +103,7 @@ void print(map_t *map) {
 
         pair_t *current = map->buckets[i];
         while (current) {
-            printf("%d: %d\n", current->key, current->value);
+            printf("%s: %s\n", current->key, current->value);
             current = current->next;
         }
     }
