@@ -12,10 +12,10 @@
 
 char *cat(char *s1, char *s2) {
     if(!s1 || !s2) return NULL;
-    printf("%s + %s\n", s1, s2);
     char *result = malloc(strlen(s1) + strlen(s2) + 1);
     strcpy(result, s1);
     strcat(result, s2);
+    printf("\"%s\" = \"%s\" + \"%s\"\n", result, s1, s2);
     return result;
 }
 
@@ -132,22 +132,26 @@ char *lzw_decode(node_t *head) {
     result[0] = '\0';
 
     add_ascii_r(map);
+    //print(map);
 
     char* temp_str = calloc(sizeof(char), 1);
     short new_sym = 0;
-    char *old = malloc(sizeof(char) * 50);
-    char *new = malloc(sizeof(char) * 50);
+    // node_t *current, *new;
+    // char *old, *new;
+    short old, new;
 
-    old = n_to_s(current->val);
-    temp_str = cat(temp_str, old);
+    old = head->val;
+    temp_str = cat(temp_str, to_string(old));
 
     head = pop(head);
     //current = current->next;
 
     while(head) {
         printf("WHILE: %s\n", temp_str);
-        new = n_to_s(head->val);
-        temp_str = cat(temp_str, get_value(map, new));
+        new = head->val;
+
+        if(contains(map, n_to_s(new)))
+            temp_str = cat(temp_str, get_value(map, n_to_s(new)));
         
         //current = pop(current);
         //current = current->next;
@@ -155,16 +159,17 @@ char *lzw_decode(node_t *head) {
 
         printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
         if(!contains(map, n_to_s(ASCII + new_sym))) {
-            result = cat(result, get_value(map, old));
+            result = cat(result, get_value(map, n_to_s(old)));
+            printf("RES -> %s\n", result);
             printf("TS -> %s\n", temp_str);
             put(map, n_to_s(ASCII + new_sym++), temp_str);
             memset(temp_str, 0, strlen(temp_str));
-            strcpy(old, new);
-            temp_str = cat(temp_str,  get_value(map, old));
+            old = new;
+            temp_str = cat(temp_str,  get_value(map, n_to_s(old)));
         }
     }
 
-    result = cat(result, get_value(map, old));
+    result = cat(result, get_value(map, n_to_s(old)));
 
     return result;
 }

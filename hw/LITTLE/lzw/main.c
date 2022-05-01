@@ -13,7 +13,7 @@
 // Type: LITTLE homework
 
 int main() {
-    char *string = "to be or not to be\0";
+    char *string = "BABAABAAA\0";
     node_t *head = init_queue();
 
     printf("%s\n", string);
