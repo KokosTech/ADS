@@ -15,7 +15,7 @@ char *cat(char *s1, char *s2) {
     char *result = malloc(strlen(s1) + strlen(s2) + 1);
     strcpy(result, s1);
     strcat(result, s2);
-    printf("\"%s\" = \"%s\" + \"%s\"\n", result, s1, s2);
+    //printf("\"%s\" = \"%s\" + \"%s\"\n", result, s1, s2);
     return result;
 }
 
@@ -84,7 +84,7 @@ node_t *lzw_encode(char *string) {
             substring[buff_c - 1] = '\0';
 
             US val = strtoul(get_value(map, substring), NULL, 0);
-            printf("\"%s\" : %d\n", substring, val);
+            //printf("\"%s\" : %d\n", substring, val);
             push(&head, val);
 
             free(substring);
@@ -147,7 +147,7 @@ char *lzw_decode(node_t *head) {
     //current = current->next;
 
     while(head) {
-        printf("WHILE: %s\n", temp_str);
+        //printf("WHILE: %s\n", temp_str);
         new = head->val;
 
         if(contains(map, n_to_s(new)))
@@ -157,11 +157,11 @@ char *lzw_decode(node_t *head) {
         //current = current->next;
         head = pop(head);
 
-        printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
+        //printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
         if(!contains(map, n_to_s(ASCII + new_sym))) {
             result = cat(result, get_value(map, n_to_s(old)));
-            printf("RES -> %s\n", result);
-            printf("TS -> %s\n", temp_str);
+            //printf("RES -> %s\n", result);
+            //printf("TS -> %s\n", temp_str);
             put(map, n_to_s(ASCII + new_sym++), temp_str);
             memset(temp_str, 0, strlen(temp_str));
             old = new;

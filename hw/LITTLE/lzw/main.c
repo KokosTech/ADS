@@ -13,11 +13,13 @@
 // Type: LITTLE homework
 
 int main() {
-    char *string = "BABAABAAA\0";
+    char *string = "yeeee, woooo, it fucking woooorks!!!!\0";
     node_t *head = init_queue();
 
-    printf("%s\n", string);
+    printf("RAW: %s\n", string);
     head = lzw_encode(string);
+    
+    printf("Encoded: ");
     print_queue(head);
 
 /*     map_t *map = init_map(ASCII);
@@ -27,6 +29,6 @@ int main() {
 
     printf("%d", get_value(map, "a"));
     printf("%d", get_value(map, "b")); */
-    printf("%s\n", lzw_decode(head));
+    printf("Decoded: %s\n", lzw_decode(head));
     return 0;
 }
