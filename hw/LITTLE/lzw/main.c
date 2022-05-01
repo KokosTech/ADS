@@ -22,13 +22,6 @@ int main() {
     printf("Encoded: ");
     print_queue(head);
 
-/*     map_t *map = init_map(ASCII);
-    add_ascii(map);
-
-    printf("\nwww\n");
-
-    printf("%d", get_value(map, "a"));
-    printf("%d", get_value(map, "b")); */
     printf("Decoded: %s\n", lzw_decode(head));
     return 0;
 }

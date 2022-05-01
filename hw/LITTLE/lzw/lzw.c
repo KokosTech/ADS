@@ -147,7 +147,7 @@ char *lzw_decode(node_t *head) {
     //current = current->next;
 
     while(head) {
-        //printf("WHILE: %s\n", temp_str);
+        printf("WHILE: %s\n", temp_str);
         new = head->val;
 
         if(contains(map, n_to_s(new)))
@@ -157,16 +157,21 @@ char *lzw_decode(node_t *head) {
         //current = current->next;
         head = pop(head);
 
-        //printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
-        if(!contains(map, n_to_s(ASCII + new_sym))) {
+        if(contains(map, n_to_s(old)))
             result = cat(result, get_value(map, n_to_s(old)));
-            //printf("RES -> %s\n", result);
-            //printf("TS -> %s\n", temp_str);
-            put(map, n_to_s(ASCII + new_sym++), temp_str);
-            memset(temp_str, 0, strlen(temp_str));
-            old = new;
-            temp_str = cat(temp_str,  get_value(map, n_to_s(old)));
+
+        //printf("ASCII - %s\n", n_to_s(ASCII + new_sym));
+
+        if(strlen(temp_str) == 1) {
+            temp_str = cat(temp_str, to_string(old));
         }
+
+        //printf("RES -> %s\n", result);
+        //printf("TS -> %s\n", temp_str);
+        put(map, n_to_s(ASCII + new_sym++), temp_str);
+        memset(temp_str, 0, strlen(temp_str));
+        old = new;
+        temp_str = cat(temp_str,  get_value(map, n_to_s(old)));
     }
 
     result = cat(result, get_value(map, n_to_s(old)));
