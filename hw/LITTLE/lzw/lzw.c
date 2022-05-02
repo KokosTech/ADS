@@ -90,13 +90,13 @@ node_t *lzw_encode(char *string) {
                 substring[i] = buffer[i];
             substring[buff_c - 1] = '\0';
 
-            US val = strtoul(get_value(map, substring), NULL, 0);
             //printf("\"%s\" : %d\n", substring, val);
-            push(&head, val);
-
+            push(&head, strtoul(get_value(map, substring), NULL, 0));
             free(substring);
+            
             put(map, buffer, n_to_s(ASCII + new_sym++));
-            buffer[0] = buffer[buff_c-1];
+
+            buffer[0] = buffer[buff_c - 1];
             buffer[1] = '\0';
             buff_c = 1;
         } else {
