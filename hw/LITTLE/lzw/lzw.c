@@ -42,7 +42,7 @@ void add_ascii(map_t *map) {
 
     char *init_char = malloc(sizeof(char) * SCHAR);
     
-    for(unsigned short i = 0; i < ASCII; ++i) {
+    for(unsigned short i = 1; i < ASCII; ++i) {
         init_char[0] = (unsigned char)i;
         init_char[1] = '\0';
         map = put(map, init_char, n_to_s(i));
@@ -56,7 +56,7 @@ void add_ascii_r(map_t *map) {
 
     char *init_char = malloc(sizeof(char) * SCHAR);
     
-    for(unsigned short i = 0; i < ASCII; ++i) {
+    for(unsigned short i = 0; i < ASCII - 1; ++i) {
         init_char[0] = (unsigned char)i;
         init_char[1] = '\0';
         map = put(map, n_to_s(i), init_char);
